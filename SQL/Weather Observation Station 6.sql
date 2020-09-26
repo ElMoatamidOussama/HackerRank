@@ -1,3 +1,3 @@
 SELECT DISTINCT(CITY)
 FROM STATION
-WHERE SUBSTRING(CITY,1,1) IN ("a","e","i","o","u")
+WHERE LEFT(CITY,1) IN ("a","e","i","o","u")
