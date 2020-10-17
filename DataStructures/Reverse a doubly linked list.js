@@ -24,33 +24,35 @@ function readLine() {
     return inputString[currentLine++];
 }
 
-const SinglyLinkedListNode = class {
+const DoublyLinkedListNode = class {
     constructor(nodeData) {
         this.data = nodeData;
         this.next = null;
+        this.prev = null;
     }
 };
 
-const SinglyLinkedList = class {
+const DoublyLinkedList = class {
     constructor() {
         this.head = null;
         this.tail = null;
     }
 
     insertNode(nodeData) {
-        const node = new SinglyLinkedListNode(nodeData);
+        let node = new DoublyLinkedListNode(nodeData);
 
         if (this.head == null) {
             this.head = node;
         } else {
             this.tail.next = node;
+            node.prev = this.tail;
         }
 
         this.tail = node;
     }
 };
 
-function printSinglyLinkedList(node, sep, ws) {
+function printDoublyLinkedList(node, sep, ws) {
     while (node != null) {
         ws.write(String(node.data));
 
@@ -67,49 +69,52 @@ function printSinglyLinkedList(node, sep, ws) {
 /*
  * For your reference:
  *
- * SinglyLinkedListNode {
+ * DoublyLinkedListNode {
  *     int data;
- *     SinglyLinkedListNode next;
+ *     DoublyLinkedListNode next;
+ *     DoublyLinkedListNode prev;
  * }
  *
  */
+/*Recursive way 
 function reverse(node) {
-    /*if(!head.next) return head;
 
-    let currentInputNode=head.next;
-    let currentOutputNode={data:head.data,next:null};
+    if (!node) return null;
 
-    while(currentInputNode){
-        let newNode={data: currentInputNode.data, next: currentOutputNode};
-        currentOutputNode=newNode;   
-        currentInputNode=currentInputNode.next; 
-    }
+    var tempNode = node.next;
+    node.next = node.prev;
+    node.prev = tempNode;
 
-    return currentOutputNode;*/
+    if (!node.prev) return node;
+    return reverse(node.prev);
+
+}*/
+function reverse(node) {
 
     if(!node) return null;
-    let nextNode,previousNode;
+
+    let nextNode;
 
     while(true){
+
         nextNode=node.next;
-        node.next=previousNode;
-        previousNode=node;
+        node.next=node.prev;
+        node.prev=nextNode;
         
-        if(!nextNode) return node;
+        if(!node.prev) return node;
         node=nextNode;
     }
-
 }
 
 function main() {
     const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
 
-    const tests = parseInt(readLine(), 10);
+    const t = parseInt(readLine(), 10);
 
-    for (let testsItr = 0; testsItr < tests; testsItr++) {
+    for (let tItr = 0; tItr < t; tItr++) {
         const llistCount = parseInt(readLine(), 10);
 
-        let llist = new SinglyLinkedList();
+        let llist = new DoublyLinkedList();
 
         for (let i = 0; i < llistCount; i++) {
             const llistItem = parseInt(readLine(), 10);
@@ -118,7 +123,7 @@ function main() {
 
         let llist1 = reverse(llist.head);
 
-        printSinglyLinkedList(llist1, " ", ws)
+        printDoublyLinkedList(llist1, " ", ws)
         ws.write("\n");
     }
 
